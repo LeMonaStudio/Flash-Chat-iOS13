@@ -7,14 +7,62 @@
 //
 
 import UIKit
+import Firebase
 
 class RegisterViewController: UIViewController {
 
     @IBOutlet weak var emailTextfield: UITextField!
     @IBOutlet weak var passwordTextfield: UITextField!
     
-    @IBAction func registerPressed(_ sender: UIButton) {
-        performSegue(withIdentifier: "goToChatFromRegister", sender: self)
+    override func viewDidLoad() {
+        emailTextfield.delegate = self
+        passwordTextfield.delegate = self
     }
     
+    @IBAction func registerPressed(_ sender: UIButton) {
+        emailTextfield.endEditing(true)
+        passwordTextfield.endEditing(true)
+        
+        if let email = emailTextfield.text, let password = passwordTextfield.text {
+            Auth.auth().createUser(withEmail: email, password: password){authResult, error in
+                if error != nil {
+                    print("Error occurred: \(error!)")
+                } else {
+                    self.performSegue(withIdentifier: "goToChatFromRegister", sender: self)
+                }
+            }
+        }
+    }
+    
+}
+
+extension RegisterViewController: UITextFieldDelegate {
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        emailTextfield.endEditing(true)
+        passwordTextfield.endEditing(true)
+        return true
+    }
+
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        if textField == emailTextfield {
+            //TODO
+            print("Email entered")
+        } else if textField == passwordTextfield {
+            print("Password entered")
+        } else {
+            
+        }
+    }
+    
+    func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
+        if (textField.text != ""){
+            //When text field has some text in it
+            //And the user press the Search button or clicks the return button in the keyboard
+            return true
+        } else {
+            textField.placeholder = "Type in something"
+            return false
+        }
+    }
 }
