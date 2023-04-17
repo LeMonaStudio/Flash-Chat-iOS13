@@ -14,6 +14,7 @@ class RegisterViewController: UIViewController {
     @IBOutlet weak var emailTextfield: UITextField!
     @IBOutlet weak var passwordTextfield: UITextField!
     
+    
     override func viewDidLoad() {
         emailTextfield.delegate = self
         passwordTextfield.delegate = self
@@ -28,7 +29,7 @@ class RegisterViewController: UIViewController {
                 if error != nil {
                     print("Error occurred: \(error!)")
                 } else {
-                    self.performSegue(withIdentifier: "goToChatFromRegister", sender: self)
+                    self.performSegue(withIdentifier: K.registerSegue, sender: self)
                 }
             }
         }

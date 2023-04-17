@@ -194,7 +194,7 @@
                                         <rect key="frame" x="49" y="51" width="317" height="45"/>
                                         <color key="textColor" name="BrandBlue"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="25"/>
-                                        <textInputTraits key="textInputTraits"/>
+                                        <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" smartDashesType="no" smartInsertDeleteType="no" smartQuotesType="no" textContentType="email"/>
                                     </textField>
                                 </subviews>
                                 <constraints>
@@ -219,7 +219,7 @@
                                         <rect key="frame" x="49" y="48" width="317" height="45"/>
                                         <color key="textColor" name="BrandBlue"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="25"/>
-                                        <textInputTraits key="textInputTraits" secureTextEntry="YES"/>
+                                        <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" secureTextEntry="YES" smartDashesType="no" smartInsertDeleteType="no" smartQuotesType="no" textContentType="password"/>
                                     </textField>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xd2-nu-tMA">
                                         <rect key="frame" x="0.0" y="124" width="414" height="53"/>
@@ -343,7 +343,13 @@
                             <constraint firstItem="S6L-hg-cne" firstAttribute="top" secondItem="6YX-ca-E8f" secondAttribute="top" id="sQt-L5-8LV"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" id="Q5u-eL-Bgp"/>
+                    <navigationItem key="navigationItem" id="Q5u-eL-Bgp">
+                        <barButtonItem key="rightBarButtonItem" title="Log out" id="EfF-le-lwU">
+                            <connections>
+                                <action selector="logOutPressed:" destination="lwd-AH-u8E" id="12p-DL-5Re"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="messageTextfield" destination="UWj-GQ-Vph" id="INS-Xk-EA9"/>
                         <outlet property="tableView" destination="S6L-hg-cne" id="dTJ-K9-WAe"/>
