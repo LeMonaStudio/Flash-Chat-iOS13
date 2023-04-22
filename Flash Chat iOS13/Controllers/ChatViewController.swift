@@ -14,11 +14,10 @@ class ChatViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var messageTextfield: UITextField!
     
-    var messages: [Message] = [
-        Message(sender: "1@2.com", body: "Hello, this is 1@2.com. How are you doing?"),
-        Message(sender: "a@b.com", body: "Hey, I'm fine and how are you doing too?"),
-        Message(sender: "1@2.com", body: "I'm fine as well, thank you for asking.")
-    ]
+    
+    let db = Firestore.firestore()
+
+    var messages: [Message] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -29,9 +28,26 @@ class ChatViewController: UIViewController {
         
         title = K.appName
         navigationItem.hidesBackButton = true
+        
+        loadMessages()
     }
     
     @IBAction func sendPressed(_ sender: UIButton) {
+        if let messageBody = messageTextfield.text,
+            let messageSender = Auth.auth().currentUser?.email {
+            db.collection(K.FStore.collectionName).addDocument(
+                data: [
+                    K.FStore.senderField : messageSender,
+                    K.FStore.bodyField: messageBody,
+                    K.FStore.dateField: Date().timeIntervalSince1970
+                ]) { error in
+                    if let err = error {
+                        print(err.localizedDescription)
+                    } else {
+                        self.messageTextfield.text = ""
+                    }
+                }
+        }
     }
     
 
@@ -41,6 +57,26 @@ class ChatViewController: UIViewController {
             navigationController?.popToRootViewController(animated: true)
         } catch let signOutError as NSError {
           print("Error signing out: %@", signOutError)
+        }
+    }
+    
+    func loadMessages() {
+        db.collection(K.FStore.collectionName).order(by: K.FStore.dateField   ).addSnapshotListener{ (querySnapshot, err) in
+            if let err = err {
+                print("Error getting documents: \(err)")
+            } else {
+                self.messages = []
+                for document in querySnapshot!.documents {
+                    let data = document.data()
+                    if let sender = data[K.FStore.senderField] as? String, let messageBody = data[K.FStore.bodyField] as? String {
+                        self.messages.append(Message(sender: sender, body: messageBody))
+                        
+                        DispatchQueue.main.async {
+                            self.tableView.reloadData()
+                        }
+                    }
+                }
+            }
         }
     }
 }
