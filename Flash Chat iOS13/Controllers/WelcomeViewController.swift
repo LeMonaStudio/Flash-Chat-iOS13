@@ -18,5 +18,4 @@ class WelcomeViewController: UIViewController {
         
         titleLabel.text = K.appName
     }
-
 }
